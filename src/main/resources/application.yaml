@@ -12,6 +12,13 @@ spring:
     hibernate:
       ddl-auto: create
     show-sql: true
+    generate-ddl: true # data.sql 사용
+    defer-datasource-initialization: true # data.sql 초기화를 ddl-auto 옵션 이후로
 
   profiles:
     default: default
+
+  # data.sql 사용
+  sql:
+    init:
+      mode: always
