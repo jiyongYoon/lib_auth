@@ -1,0 +1,13 @@
+### 회원가입
+POST http://localhost:8080/api/signup
+Content-Type: application/json
+
+{
+  "userEmail": "user1",
+  "userPassword": "test",
+  "userRole": "ROLE_USER"
+}
+
+### 로그인,
+GET http://localhost:8080/
+Authorization: Basic dXNlcjE6dGVzdA== ## user1:test 를 base64로 인코딩한 값
