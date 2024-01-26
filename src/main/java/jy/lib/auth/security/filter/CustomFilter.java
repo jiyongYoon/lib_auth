@@ -1,7 +1,7 @@
 package jy.lib.auth.security.filter;
 
-import jy.lib.auth.security.jwt.JwtAuthenticationFilter;
-import jy.lib.auth.security.jwt.JwtAuthorizationFilter;
+import jy.lib.auth.security.jwt.filter.JwtAuthenticationFilter;
+import jy.lib.auth.security.jwt.filter.JwtAuthorizationFilter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;

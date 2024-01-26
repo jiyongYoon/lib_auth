@@ -1,8 +1,9 @@
-package jy.lib.auth.security.jwt;
+package jy.lib.auth.security.jwt.filter;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jy.lib.auth.entity.User;
 import jy.lib.auth.security.UserDetailsImpl;
+import jy.lib.auth.security.jwt.util.JwtDecoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,8 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static jy.lib.auth.security.jwt.JwtGenerator.CLAIM_USER_NAME;
-import static jy.lib.auth.security.jwt.JwtGenerator.TOKEN_PREFIX;
+import static jy.lib.auth.security.jwt.JwtProperties.*;
 
 
 @Slf4j
@@ -44,7 +44,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         log.info("jwt 값이 있는 요청, {}", jwt);
 
         try {
-            DecodedJWT decodedJWT = JwtGenerator.validateToken(jwt);
+            DecodedJWT decodedJWT = JwtDecoder.validateToken(jwt);
             log.info("검증완료!!!");
             User loginUser = User.builder()
                     .userEmail(decodedJWT.getClaim(CLAIM_USER_NAME).asString())

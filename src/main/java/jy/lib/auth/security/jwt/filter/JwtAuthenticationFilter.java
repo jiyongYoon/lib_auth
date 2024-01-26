@@ -1,14 +1,15 @@
-package jy.lib.auth.security.jwt;
+package jy.lib.auth.security.jwt.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import jy.lib.auth.security.UserDetailsImpl;
+import jy.lib.auth.security.jwt.JwtLoginVo;
+import jy.lib.auth.security.jwt.util.JwtGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static jy.lib.auth.security.jwt.JwtGenerator.TOKEN_PREFIX;
+import static jy.lib.auth.security.jwt.JwtProperties.TOKEN_PREFIX;
 
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -50,8 +51,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(jwtLoginVo.getUsername(), jwtLoginVo.getPassword());
 
-        AuthenticationManager authenticationManager = super.getAuthenticationManager();
-
         // 3. AuthenticationManager에게 인증 위임 -> loadUserByUsername()으로 DB에서 데이터 확인
         return super.getAuthenticationManager().authenticate(authenticationToken);
     }
@@ -63,7 +62,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) {
 
-        UserDetails authenticateUserDetails = (UserDetails) authResult.getPrincipal();
+        UserDetailsImpl authenticateUserDetails = (UserDetailsImpl) authResult.getPrincipal();
         log.info("login success!! username={}", authenticateUserDetails.getUsername());
         /** (Optional) Spring Security Context에 저장
          * SecurityContext context = SecurityContextHolder.createEmptyContext();
@@ -75,10 +74,4 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         response.addHeader(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + jwt);
     }
-
-//    // Caused by: java.lang.IllegalArgumentException: authenticationManager must be specified
-//    // UsernamePasswordAuthenticationFilter 에서 사용하는 AuthenticationManager 객체를 할당해주어야 한다.
-//    public void setAuthenticationManager() {
-//        super.setAuthenticationManager(authenticationManager);
-//    }
 }
