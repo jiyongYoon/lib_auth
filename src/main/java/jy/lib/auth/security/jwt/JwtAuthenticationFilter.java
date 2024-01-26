@@ -16,10 +16,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static jy.lib.auth.security.jwt.JwtGenerator.TOKEN_PREFIX;
+
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private static final String TOKEN_PREFIX = "Bearer ";
+
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
         super.setFilterProcessesUrl("/api/login");
@@ -32,7 +34,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
-        log.info("JwtAuthenticationFilter ================");
+        log.info("================ JwtAuthenticationFilter ================");
 
         // 1. json RequestBody 에서 값 추출
         JwtLoginVo jwtLoginVo = null;

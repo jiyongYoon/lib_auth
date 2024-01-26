@@ -16,3 +16,7 @@ Content-Type: application/json
   "username": "user1",
   "password": "test"
 }
+
+### 인가요청
+GET http://localhost:8080
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJFWFBJUkVEX0RBVEUiOjE3MDYxNzY5MDcsImlzcyI6ImppeW9uZyIsIlVTRVJfTkFNRSI6InVzZXIxIn0.AmAYTq8Ve7kq-mZEuB67tmrfJW4Lq4PZGR9MwQCv8tE
