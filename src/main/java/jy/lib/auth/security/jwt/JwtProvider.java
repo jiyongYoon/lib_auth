@@ -35,6 +35,9 @@ public class JwtProvider implements AuthenticationProvider {
         );
     }
 
+    /**
+     * jwt token 인증에 사용할 Token 객체를 명시한다.
+     */
     @Override
     public boolean supports(Class<?> authentication) {
         return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);

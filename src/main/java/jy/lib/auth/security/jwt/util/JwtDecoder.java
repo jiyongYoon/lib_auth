@@ -25,7 +25,7 @@ public class JwtDecoder {
      * 2. 서명 검사 <br>
      * 3. 구조에 따라 public으로 오픈할 가능성 높음
      */
-    public static DecodedJWT validateToken(String token) throws Exception {
+    public static DecodedJWT validateToken(String token) {
         Date now = new Date();
         Date tokenExpiredDate = JWT.decode(token).getClaim(CLAIM_EXPIRED_DATE).asDate();
         if (tokenExpiredDate.before(now)) {

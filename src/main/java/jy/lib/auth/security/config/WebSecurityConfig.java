@@ -22,8 +22,9 @@ public class WebSecurityConfig {
         http.csrf().disable();
 
         http
-                .httpBasic()
-            .and()
+//                jwt 사용시 필요없음
+//                .httpBasic()
+//            .and()
                 .authorizeRequests()
                     .antMatchers("/api/signup").permitAll()
                     .antMatchers("/api/login").permitAll()

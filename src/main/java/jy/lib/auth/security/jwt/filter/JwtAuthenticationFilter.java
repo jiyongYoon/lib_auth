@@ -70,7 +70,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
          * SecurityContextHolder.setContext(context);
          */
 
-        String jwt = JwtGenerator.generateJwtToken(authenticateUserDetails);
+        String jwt = JwtGenerator.generateAccessToken(authenticateUserDetails);
 
         response.addHeader(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + jwt);
     }

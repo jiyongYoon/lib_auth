@@ -2,7 +2,6 @@ package jy.lib.auth.security.jwt.util;
 
 import com.auth0.jwt.JWT;
 import jy.lib.auth.security.UserDetailsImpl;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.annotation.PostConstruct;
 import java.util.Base64;
@@ -24,7 +23,7 @@ public class JwtGenerator {
     /**
      * JWT 토큰 생성
      */
-    public static String generateJwtToken(UserDetailsImpl userDetails) {
+    public static String generateAccessToken(UserDetailsImpl userDetails) {
         Date now = new Date();
 
         return JWT.create()

@@ -1,4 +1,4 @@
-package jy.lib.auth.dao;
+package jy.lib.auth.persistence;
 
 
 import jy.lib.auth.entity.User;
