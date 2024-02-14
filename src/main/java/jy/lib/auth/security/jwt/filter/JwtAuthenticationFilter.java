@@ -3,6 +3,9 @@ package jy.lib.auth.security.jwt.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jy.lib.auth.security.UserDetailsImpl;
 import jy.lib.auth.security.jwt.JwtLoginVo;
+import jy.lib.auth.security.jwt.JwtProperties;
+import jy.lib.auth.security.jwt.RefreshTokenStorage;
+import jy.lib.auth.security.jwt.dto.GenerateJwtRequest;
 import jy.lib.auth.security.jwt.util.JwtGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -23,10 +26,13 @@ import static jy.lib.auth.security.jwt.JwtProperties.TOKEN_PREFIX;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    private final RefreshTokenStorage refreshTokenStorage;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, RefreshTokenStorage refreshTokenStorage) {
         super.setFilterProcessesUrl("/api/login");
         super.setAuthenticationManager(authenticationManager);
+        this.refreshTokenStorage = refreshTokenStorage;
     }
 
     /**
@@ -70,8 +76,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
          * SecurityContextHolder.setContext(context);
          */
 
-        String jwt = JwtGenerator.generateAccessToken(authenticateUserDetails);
+        String accessToken = JwtGenerator.generateAccessToken(GenerateJwtRequest.builder()
+                        .userId(authenticateUserDetails.getUser().getUserId())
+                        .username(authenticateUserDetails.getUsername())
+                        .build());
+        String refreshToken = JwtGenerator.generateRefreshToken();
 
-        response.addHeader(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + jwt);
+        refreshTokenStorage.saveAccessAndRefreshToken(accessToken, refreshToken);
+
+        response.addHeader(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + accessToken);
+        response.addHeader(JwtProperties.REFRESH_TOKEN_HEADER, refreshToken);
     }
 }

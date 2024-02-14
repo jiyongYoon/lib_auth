@@ -1,7 +1,7 @@
 package jy.lib.auth.security.jwt.util;
 
 import com.auth0.jwt.JWT;
-import jy.lib.auth.security.UserDetailsImpl;
+import jy.lib.auth.security.jwt.dto.GenerateJwtRequest;
 
 import javax.annotation.PostConstruct;
 import java.util.Base64;
@@ -21,16 +21,29 @@ public class JwtGenerator {
     }
 
     /**
-     * JWT 토큰 생성
+     * JWT Access Token 생성
      */
-    public static String generateAccessToken(UserDetailsImpl userDetails) {
+    public static String generateAccessToken(GenerateJwtRequest generateJwtRequest) {
         Date now = new Date();
 
         return JWT.create()
                 .withIssuer(ISSUER)
-                .withClaim(CLAIM_USER_ID, userDetails.getUser().getUserId())
-                .withClaim(CLAIM_USER_NAME, userDetails.getUsername())
-                .withClaim(CLAIM_EXPIRED_DATE, new Date(now.getTime() + HOUR))
+                .withClaim(CLAIM_USER_ID, generateJwtRequest.getUserId())
+                .withClaim(CLAIM_USER_NAME, generateJwtRequest.getUsername())
+                .withClaim(CLAIM_EXPIRED_DATE, new Date(now.getTime() + MINUTE / 2))
                 .sign(getAlgorithm(SECRET_KEY));
     }
+
+    /**
+     * JWT Refresh Token 생성
+     */
+    public static String generateRefreshToken() {
+        Date now = new Date();
+
+        return JWT.create()
+                .withIssuer(ISSUER)
+                .withIssuedAt(now)
+                .sign(getAlgorithm(SECRET_KEY));
+    }
+
 }

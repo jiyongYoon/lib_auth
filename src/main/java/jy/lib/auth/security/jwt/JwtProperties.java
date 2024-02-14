@@ -17,6 +17,7 @@ public class JwtProperties {
     public static final String CLAIM_USER_ID = "user_id";
 
     public static final String TOKEN_PREFIX = "Bearer ";
+    public static final String REFRESH_TOKEN_HEADER = "Refresh_Token";
 
     public static Algorithm getAlgorithm(String secretKey) {
         return Algorithm.HMAC256(secretKey);

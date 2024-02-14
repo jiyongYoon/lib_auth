@@ -1,6 +1,7 @@
 package jy.lib.auth.security.config;
 
 import jy.lib.auth.security.filter.CustomFilter;
+import jy.lib.auth.security.jwt.RefreshTokenStorage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
+    private final RefreshTokenStorage refreshTokenStorage;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -28,13 +30,14 @@ public class WebSecurityConfig {
                 .authorizeRequests()
                     .antMatchers("/api/signup").permitAll()
                     .antMatchers("/api/login").permitAll()
+                    .antMatchers("/api/token").permitAll()
                     .anyRequest().authenticated()
             .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .apply(new CustomFilter())
+                .apply(new CustomFilter(refreshTokenStorage))
                 ;
 
         return http.build();

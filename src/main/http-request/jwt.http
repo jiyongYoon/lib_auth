@@ -17,6 +17,44 @@ Content-Type: application/json
   "password": "test"
 }
 
+> {%
+client.test("Validate", function() { // Validate라는 이름의 테스트를 수행
+client.assert(response.status === 200, "Response status is not 200"); // 응답값이 200이면 통과
+// client.assert(response.contentType.mimeType === "application/json", "Expected 'application/json'"); // 응답값이 application/json이면 통과
+client.assert(response.headers.valueOf("Authorization").trim().length > 0); // 토큰 길이가 0보다 크면 통과
+client.assert(response.headers.valueOf("Refresh_Token").trim().length > 0); // 토큰 길이가 0보다 크면 통과
+});
+
+client.log(response.headers.valueOf("Authorization")); // 토큰 값 로깅
+client.log(response.headers.valueOf("Refresh_Token")); // 토큰 값 로깅
+
+client.global.set("accessToken", response.headers.valueOf("Authorization")) // 토큰 값을 global 변수에 set
+client.global.set("refreshToken", response.headers.valueOf("Refresh_Token")) // 토큰 값을 global 변수에 set
+%}
+
 ### 인가요청
 GET http://localhost:8080
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1LCJ1c2VyX25hbWUiOiJ1c2VyMSIsImlzcyI6ImppeW9uZyIsImV4cGlyZWRfZGF0ZSI6MTcwNzc4OTU5NH0.nDL0ZQVbCu_uwO_2LrSpvkAhVAg9dzHWMWQ_DhyCAqo
+Authorization: {{accessToken}}
+
+### 엑세스 토큰 만료로 인한 Refresh token 추가 요청
+GET http://localhost:8080
+Authorization: {{accessToken}}
+Refresh_Token: {{refreshToken}}
+
+> {%
+client.test("Validate", function() { // Validate라는 이름의 테스트를 수행
+client.assert(response.status === 200, "Response status is not 200"); // 응답값이 200이면 통과
+// client.assert(response.contentType.mimeType === "application/json", "Expected 'application/json'"); // 응답값이 application/json이면 통과
+client.assert(response.headers.valueOf("Authorization").trim().length > 0); // 토큰 길이가 0보다 크면 통과
+client.assert(response.headers.valueOf("Refresh_Token").trim().length > 0); // 토큰 길이가 0보다 크면 통과
+});
+
+client.log(response.headers.valueOf("Authorization")); // 토큰 값 로깅
+client.log(response.headers.valueOf("Refresh_Token")); // 토큰 값 로깅
+
+client.global.set("accessToken", response.headers.valueOf("Authorization")) // 토큰 값을 global 변수에 set
+client.global.set("refreshToken", response.headers.valueOf("Refresh_Token")) // 토큰 값을 global 변수에 set
+%}
+
+### Server에 등록된 Token 내용 확인 (테스트, 관리용)
+GET http://localhost:8080/api/token
