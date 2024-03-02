@@ -13,6 +13,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -71,6 +73,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserDetailsImpl authenticateUserDetails = (UserDetailsImpl) authResult.getPrincipal();
         log.info("login success!! username={}", authenticateUserDetails.getUsername());
         /** (Optional) Spring Security Context에 저장
+         * -> 추가 학습을 해보니 WebSecurityConfig에서 sessionCreationPolicy 정책이 설정되어 있으면
+         * -> loadUserByUsername 호출 시 return 값이 Context에 저장이 됨...
          * SecurityContext context = SecurityContextHolder.createEmptyContext();
          * context.setAuthentication(authResult);
          * SecurityContextHolder.setContext(context);

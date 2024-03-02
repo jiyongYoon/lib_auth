@@ -58,3 +58,6 @@ client.global.set("refreshToken", response.headers.valueOf("Refresh_Token")) // 
 
 ### Server에 등록된 Token 내용 확인 (테스트, 관리용)
 GET http://localhost:8080/api/token
+
+### 로그인 된 SecurityContext 내용 확인 (테스트, 관리용)
+GET http://localhost:8080/api/context

@@ -1,5 +1,6 @@
 package jy.lib.auth.entity;
 
+import jy.lib.auth.security.oauth.Provider;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,5 +26,8 @@ public class User {
     private String userPassword;
 
     private String userRole;
+
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
 
 }
