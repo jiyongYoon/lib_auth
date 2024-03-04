@@ -1,9 +1,8 @@
 package jy.lib.auth.security;
 
-import java.util.Optional;
-import jy.lib.auth.security.oauth.Provider;
 import jy.lib.auth.entity.User;
 import jy.lib.auth.repository.UserRepository;
+import jy.lib.auth.security.oauth.UserGeneratorByProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -11,6 +10,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,12 +28,8 @@ public class PrincipalOauth2UserServiceImpl extends DefaultOAuth2UserService {
         Optional<User> optionalUser = userRepository.findByEmail(oAuth2User.getAttribute("email"));
         User user;
         if (optionalUser.isEmpty()) {
-            user = User.builder()
-                .userEmail(oAuth2User.getAttribute("email"))
-                .userPassword(passwordEncoder.encode(oAuth2User.getAttribute("sub") + "_myApp"))
-                .userRole("ROLE_USER")
-                .provider(Provider.getProvider(userRequest.getClientRegistration().getRegistrationId()))
-                .build();
+            String providerIdentifier = userRequest.getClientRegistration().getRegistrationId();
+            user = UserGeneratorByProvider.generateUser(providerIdentifier, oAuth2User, passwordEncoder);
             userRepository.save(user);
         } else {
             user = optionalUser.get();

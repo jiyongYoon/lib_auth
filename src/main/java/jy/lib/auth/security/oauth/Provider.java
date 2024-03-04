@@ -3,6 +3,7 @@ package jy.lib.auth.security.oauth;
 public enum Provider {
     APP("app"),
     GOOGLE("google"),
+    KAKAO("kakao"),
     ;
 
     Provider(String value) {
