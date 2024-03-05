@@ -1,5 +1,6 @@
 package jy.lib.auth.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jy.lib.auth.entity.User;
 import jy.lib.auth.repository.UserRepository;
 import jy.lib.auth.security.oauth.UserGeneratorByProvider;
@@ -19,6 +20,7 @@ public class PrincipalOauth2UserServiceImpl extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ObjectMapper objectMapper;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -29,7 +31,7 @@ public class PrincipalOauth2UserServiceImpl extends DefaultOAuth2UserService {
         User user;
         if (optionalUser.isEmpty()) {
             String providerIdentifier = userRequest.getClientRegistration().getRegistrationId();
-            user = UserGeneratorByProvider.generateUser(providerIdentifier, oAuth2User, passwordEncoder);
+            user = UserGeneratorByProvider.generateUser(providerIdentifier, oAuth2User, passwordEncoder, objectMapper);
             userRepository.save(user);
         } else {
             user = optionalUser.get();

@@ -4,6 +4,7 @@ public enum Provider {
     APP("app"),
     GOOGLE("google"),
     KAKAO("kakao"),
+    NAVER("naver"),
     ;
 
     Provider(String value) {

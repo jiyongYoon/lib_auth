@@ -21,12 +21,11 @@ public class OAuth2LoginTokenResponseFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
         throws IOException, ServletException {
 
-        log.info("oauth-jwt redirect!");
-
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         if (httpRequest.getRequestURI().startsWith("/api/oauth-jwt")) {
+            log.info("oauth-jwt redirect!");
             String accessToken = request.getParameter("access_token");
             String refreshToken = request.getParameter("refresh_token");
 
