@@ -1,6 +1,6 @@
 package jy.lib.auth.entity;
 
-import jy.lib.auth.security.oauth.Provider;
+import jy.lib.auth.security.oauth.OAuth2Provider;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,6 +28,6 @@ public class User {
     private String userRole;
 
     @Enumerated(EnumType.STRING)
-    private Provider provider;
+    private OAuth2Provider oAuth2Provider;
 
 }

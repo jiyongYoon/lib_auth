@@ -1,7 +1,7 @@
 package jy.lib.auth.service;
 
 import jy.lib.auth.dto.UserDto;
-import jy.lib.auth.security.oauth.Provider;
+import jy.lib.auth.security.oauth.OAuth2Provider;
 import jy.lib.auth.entity.User;
 import jy.lib.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class UserService {
                 .userEmail(userDto.getUserEmail())
                 .userPassword(passwordEncoder.encode(userDto.getUserPassword()))
                 .userRole("ROLE_USER")
-                .provider(Provider.APP)
+                .oAuth2Provider(OAuth2Provider.APP)
                 .build();
 
         return UserDto.toDto(userRepository.save(user));

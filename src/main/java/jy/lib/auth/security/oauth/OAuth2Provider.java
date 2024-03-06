@@ -1,13 +1,13 @@
 package jy.lib.auth.security.oauth;
 
-public enum Provider {
+public enum OAuth2Provider {
     APP("app"),
     GOOGLE("google"),
     KAKAO("kakao"),
     NAVER("naver"),
     ;
 
-    Provider(String value) {
+    OAuth2Provider(String value) {
         this.value = value;
     }
 
@@ -17,8 +17,8 @@ public enum Provider {
         return value;
     }
 
-    public static Provider getProvider(String provider) {
-        for (Provider value : Provider.values()) {
+    public static OAuth2Provider getProvider(String provider) {
+        for (OAuth2Provider value : OAuth2Provider.values()) {
             if (value.getValue().equals(provider)) {
                 return value;
             }
